@@ -14,6 +14,10 @@ var uglify = require('gulp-uglify');
 
 var minCss = require('gulp-clean-css');
 
+var search = require('./mock/search.json');
+
+var list = require('./mock/list.json');
+
 //编译scss
 gulp.task('sass', function() {
     return gulp.src('./src/scss/*.scss')
@@ -54,9 +58,16 @@ gulp.task('server', function() {
                 }
 
                 if (pathname === '/api/list') {
-                    res.end();
+                    res.end(JSON.stringify({ code: 0, data: list }));
                 } else if (pathname === '/api/search') {
-                    res.end();
+                    var key = url.parse(req.url, true).query.key;
+                    var arr = [];
+                    search.forEach(function(item) {
+                        if (item.tit.match(key)) {
+                            arr.push(item);
+                        }
+                    });
+                    res.end(JSON.stringify({ code: 0, data: arr }));
                 } else {
                     pathname = pathname === '/' ? 'index.html' : pathname;
                     res.end(fs.readFileSync(path.join(__dirname, 'src', pathname)));

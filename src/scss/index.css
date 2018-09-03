@@ -53,6 +53,7 @@ body {
   position: absolute;
   top: 60px;
   left: 0;
+  background: #fff;
 }
 
 .wrap .search .list li {
